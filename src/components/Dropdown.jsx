@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import _ from "lodash";
@@ -8,7 +8,6 @@ import {
 } from "reactstrap";
 
 const Label = styled.label`
-  font-size: 16px;
   color:  ${props => (props.disabled ? "#7a7a7a" : "#000")};
   ${props => props.labelInline && "margin-bottom 0; margin-right: 16px;"}
 `;
@@ -57,7 +56,7 @@ const DropdownItemStyled = styled(DropdownItem)`
   }
 `;
 
-export default class Dropdown extends React.Component {
+export default class Dropdown extends Component {
   state = {
     dropdownOpen: false,
   }

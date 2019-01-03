@@ -7,6 +7,7 @@ import cleanDeep from "clean-deep";
 import VehiclesApi from "./api/vehicles";
 
 import Dropdown from "./components/Dropdown";
+import RangeSlider from "./components/RangeSlider";
 import Sort from "./components/Sort";
 import VehicleCard from "./components/VehicleCard";
 
@@ -100,6 +101,12 @@ class App extends Component {
         <Container className="py-3">
           <Row>
             <FilterCol xs="12" lg="3">
+              <RangeSlider
+                label="Monthly Budget"
+                valuesFormater={values => `£${values[0]} - £${values[1]}`}
+                onChange={values => this.updateSearchParams({ price_min: values[0], price_max: values[1] })}
+              />
+
               <Dropdown
                 anyOption
                 label="Car Make"

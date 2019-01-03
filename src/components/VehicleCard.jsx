@@ -27,6 +27,7 @@ const BrandNewTag = styled(Tag)`
   position: absolute;
   top: 25px;
   left: 25px;
+  z-index: 1;
 `;
 
 const Img = styled.img`
