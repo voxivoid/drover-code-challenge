@@ -8,15 +8,20 @@ import {
 
 const Label = styled.label`
   font-size: 16px;
+  color:  ${props => (props.disabled ? "#7a7a7a" : "#000")};
 `;
 
 const DropdownToggleStyled = styled(DropdownToggle)`
   width: 100%;
   text-align: left;
   padding: 0px 10px;
-  border: 1px solid #000;
+  border:  ${props => (props.disabled ? "1px solid #bfbfbf" : "1px solid #000")};
+  color:  ${props => (props.disabled ? "#dedede" : "#000")};
+  pointer-events:  ${props => (props.disabled ? "none" : "auto")};
   height: 40px;
   cursor: pointer;
+
+  ${props => (props.disabled ? "#c8c8c8" : "white")};
 
   i {
     font-size: 20px;
@@ -67,19 +72,21 @@ export default class Dropdown extends React.Component {
 
   select = (option) => {
     const { onChange } = this.props;
+
     this.toggle();
+
     onChange(option.value);
   }
 
   render = () => {
-    const { label, value } = this.props;
+    const { label, value, disabled } = this.props;
     const { dropdownOpen } = this.state;
 
     const options = this.getOptions();
 
     return (
       <div className="d-flex flex-column">
-        <Label>{label}</Label>
+        <Label disabled={disabled}>{label}</Label>
         <BSDropdown isOpen={dropdownOpen} toggle={this.toggle}>
           <DropdownToggleStyled
             tag="span"
@@ -87,6 +94,7 @@ export default class Dropdown extends React.Component {
             onClick={this.toggle}
             data-toggle="dropdown"
             aria-expanded={dropdownOpen}
+            disabled={disabled}
           >
             <span>{options.find(option => option.value === value).label}</span>
             <i className="fas fa-caret-down" />
@@ -115,10 +123,12 @@ Dropdown.propTypes = {
     label: PropTypes.string.isRequired,
   })).isRequired,
   anyOption: PropTypes.bool,
+  disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
 };
 
 Dropdown.defaultProps = {
-  anyOption: false,
   value: "",
+  anyOption: false,
+  disabled: false,
 };

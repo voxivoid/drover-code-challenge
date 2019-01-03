@@ -53,12 +53,14 @@ class App extends Component {
     }
   }
 
-  generateMakeOptions = () => {
+  generateOptions = (path) => {
     const { searchRes } = this.state;
 
-    if (!searchRes || !searchRes.metadata.aggregations.vehicle_make) return null;
+    const data = _.get(searchRes, path);
 
-    return _.map(searchRes.metadata.aggregations.vehicle_make, (count, make) => ({ label: `${make} (${count})`, value: make }));
+    if (!data) return null;
+
+    return _.map(data, (count, make) => ({ label: `${make} (${count})`, value: make }));
   }
 
   updateSearchParams = (params) => {
@@ -76,9 +78,10 @@ class App extends Component {
               <Dropdown
                 anyOption
                 label="Car Make"
-                options={this.generateMakeOptions()}
+                options={this.generateOptions("metadata.aggregations.vehicle_make")}
                 value={searchParams.vehicle_make}
                 onChange={value => this.updateSearchParams({ vehicle_make: value })}
+                disabled
               />
             </Col>
             <Col xs="12" lg="9">
