@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import _ from "lodash";
 
 import {
   Dropdown as BSDropdown, DropdownToggle, DropdownMenu, DropdownItem,
@@ -9,6 +10,11 @@ import {
 const Label = styled.label`
   font-size: 16px;
   color:  ${props => (props.disabled ? "#7a7a7a" : "#000")};
+  ${props => props.labelInline && "margin-bottom 0; margin-right: 16px;"}
+`;
+
+const DropdownStyled = styled(BSDropdown)`
+  width: 100%;
 `;
 
 const DropdownToggleStyled = styled(DropdownToggle)`
@@ -79,15 +85,17 @@ export default class Dropdown extends React.Component {
   }
 
   render = () => {
-    const { label, value, disabled } = this.props;
+    const {
+      label, value, disabled, labelInline,
+    } = this.props;
     const { dropdownOpen } = this.state;
 
     const options = this.getOptions();
 
     return (
-      <div className="d-flex flex-column">
-        <Label disabled={disabled}>{label}</Label>
-        <BSDropdown isOpen={dropdownOpen} toggle={this.toggle}>
+      <div className={`d-flex ${labelInline ? "flex-row align-items-center" : "flex-column"}`}>
+        <Label labelInline={labelInline} disabled={disabled}>{label}</Label>
+        <DropdownStyled isOpen={dropdownOpen} toggle={this.toggle}>
           <DropdownToggleStyled
             tag="span"
             className="d-flex flex-row align-items-center justify-content-between"
@@ -96,7 +104,7 @@ export default class Dropdown extends React.Component {
             aria-expanded={dropdownOpen}
             disabled={disabled}
           >
-            <span>{options.find(option => option.value === value).label}</span>
+            <span>{_.get(options.find(option => option.value === value), "label")}</span>
             <i className="fas fa-caret-down" />
           </DropdownToggleStyled>
           <DropdownMenuStyled>
@@ -109,7 +117,7 @@ export default class Dropdown extends React.Component {
               </DropdownItemStyled>
             ))}
           </DropdownMenuStyled>
-        </BSDropdown>
+        </DropdownStyled>
       </div>
     );
   }
@@ -117,6 +125,7 @@ export default class Dropdown extends React.Component {
 
 Dropdown.propTypes = {
   label: PropTypes.string.isRequired,
+  labelInline: PropTypes.bool,
   value: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.string.isRequired,
@@ -128,6 +137,7 @@ Dropdown.propTypes = {
 };
 
 Dropdown.defaultProps = {
+  labelInline: false,
   value: "",
   anyOption: false,
   disabled: false,
