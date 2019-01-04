@@ -94,6 +94,7 @@ class App extends Component {
       price_max: 3000,
       per_page: 30,
       page: 1,
+      location: "London, Uk",
     },
     searchRes: null,
     loading: false,
