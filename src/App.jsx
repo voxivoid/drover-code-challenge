@@ -7,10 +7,11 @@ import cleanDeep from "clean-deep";
 import VehiclesApi from "./api/vehicles";
 
 import Dropdown from "./components/Dropdown";
+import LoadingCloak from "./components/LoadingCloak";
+import Pagination from "./components/Pagination";
 import RangeSlider from "./components/RangeSlider";
 import Sort from "./components/Sort";
 import VehicleCard from "./components/VehicleCard";
-import LoadingCloak from "./components/LoadingCloak";
 
 const ContentCol = styled(Col)`
   position: relative;
@@ -85,15 +86,16 @@ class App extends Component {
   }
 
   updateSearchParams = (params) => {
-    this.setState(state => ({ searchParams: { ...state.searchParams, ...params } }), this.search);
+    this.setState(state => ({ searchParams: { ...state.searchParams, ...params, page: params.page || 1 } }), this.search);
   }
 
   search = () => {
     const { searchParams } = this.state;
 
     try {
-      this.setState({ loading: true }, async () => this.setState({ searchRes: await VehiclesApi.search(cleanDeep(searchParams)) }, () => this.setState({ loading: false })));
-      console.log(this.state.searchRes);
+      this.setState({ loading: true },
+        async () => this.setState({ searchRes: await VehiclesApi.search(cleanDeep(searchParams)) },
+          () => this.setState({ loading: false })));
     } catch (e) {
       // TODO: Add error message
     }
@@ -153,6 +155,16 @@ class App extends Component {
                   </Col>
                 ))}
               </VehiclesRow>
+              <div className="d-flex flex-column align-items-center">
+                <p>Showing {(searchParams.page - 1) * searchParams.per_page + 1}-{searchParams.page * searchParams.per_page} of {_.get(searchRes, "metadata.total_count")} results</p>
+                <Pagination
+                  activePage={searchParams.page}
+                  itemsCountPerPage={searchParams.per_page}
+                  totalItemsCount={_.get(searchRes, "metadata.total_count")}
+                  pageRangeDisplayed={4}
+                  onChange={page => this.updateSearchParams({ page })}
+                />
+              </div>
             </ContentCol>
           </Row>
         </Container>
