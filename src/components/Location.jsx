@@ -23,7 +23,6 @@ export default class Location extends Component {
   };
 
   getPlacePredictions = async (value) => {
-    console.log(value);
     if (value) {
       this.setState({ options: (await getPlacePredictions({ input: value })).map(place => ({ value: place.description, label: place.description })) });
     }

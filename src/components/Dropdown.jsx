@@ -140,6 +140,7 @@ Dropdown.propTypes = {
   anyOption: PropTypes.bool,
   disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
+  children: PropTypes.node,
 };
 
 Dropdown.defaultProps = {
@@ -147,4 +148,5 @@ Dropdown.defaultProps = {
   value: "",
   anyOption: false,
   disabled: false,
+  children: null,
 };
