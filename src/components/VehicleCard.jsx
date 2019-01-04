@@ -50,12 +50,12 @@ export default function VehicleCard({
       <Img src={image} alt={`${make} ${model}`} />
 
       <div className="d-flex flex-row justify-content-between">
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-column justify-content-between">
           <h6>{year} {make}</h6>
           <p>{model}</p>
         </div>
 
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-column justify-content-between">
           <h5>£{Math.ceil(pricePerMonth)}</h5>
           <p>A month</p>
         </div>

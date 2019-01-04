@@ -10,6 +10,11 @@ import Dropdown from "./components/Dropdown";
 import RangeSlider from "./components/RangeSlider";
 import Sort from "./components/Sort";
 import VehicleCard from "./components/VehicleCard";
+import LoadingCloak from "./components/LoadingCloak";
+
+const ContentCol = styled(Col)`
+  position: relative;
+`;
 
 const VehiclesRow = styled(Row)`
   margin: 0 -8px;
@@ -54,6 +59,7 @@ class App extends Component {
       page: 1,
     },
     searchRes: null,
+    loading: false,
   };
 
   componentDidMount = () => {
@@ -82,11 +88,11 @@ class App extends Component {
     this.setState(state => ({ searchParams: { ...state.searchParams, ...params } }), this.search);
   }
 
-  search = async () => {
+  search = () => {
     const { searchParams } = this.state;
 
     try {
-      this.setState({ searchRes: await VehiclesApi.search(cleanDeep(searchParams)) });
+      this.setState({ loading: true }, async () => this.setState({ searchRes: await VehiclesApi.search(cleanDeep(searchParams)) }, () => this.setState({ loading: false })));
       console.log(this.state.searchRes);
     } catch (e) {
       // TODO: Add error message
@@ -94,7 +100,7 @@ class App extends Component {
   }
 
   render = () => {
-    const { searchParams, searchRes } = this.state;
+    const { searchParams, searchRes, loading } = this.state;
 
     return searchRes
       ? (
@@ -123,7 +129,8 @@ class App extends Component {
                 disabled={!searchParams.vehicle_make}
               />
             </FilterCol>
-            <Col xs="12" lg="9">
+            <ContentCol xs="12" lg="9">
+              {loading && <LoadingCloak />}
               <Row className="justify-content-between">
                 <Col xs="12" lg="6">
                   <h2>{_.get(searchRes, "metadata.total_count")} {_.get(searchRes, "metadata.total_count") === 1 ? " car available" : " cars available"}</h2>
@@ -146,7 +153,7 @@ class App extends Component {
                   </Col>
                 ))}
               </VehiclesRow>
-            </Col>
+            </ContentCol>
           </Row>
         </Container>
       )
