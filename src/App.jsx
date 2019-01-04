@@ -13,8 +13,18 @@ import RangeSlider from "./components/RangeSlider";
 import Sort from "./components/Sort";
 import VehicleCard from "./components/VehicleCard";
 
+const ContainerStyled = styled(Container)`
+  @media (max-width: 992px) {
+    padding-bottom: 70px !important;
+  }
+`;
+
 const ContentCol = styled(Col)`
   position: relative;
+
+  @media (max-width: 992px) {
+    ${props => (props.refineSearch && "display: none;")};
+  }
 `;
 
 const VehiclesRow = styled(Row)`
@@ -29,6 +39,32 @@ const VehiclesRow = styled(Row)`
 const FilterCol = styled(Col)`
   > *:not(:first-child) {
     margin-top: 32px;
+  }
+
+  @media (max-width: 992px) {
+    ${props => (!props.refineSearch && "display: none;")};
+  }
+`;
+
+const RefineSearch = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #50ff7d;
+  text-align: center;
+  z-index: 9999;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #00ca4d;
+    border: medium none;
+    color: #000;
+  }
+
+  @media (min-width: 992px) {
+    display: none;
   }
 `;
 
@@ -61,6 +97,7 @@ class App extends Component {
     },
     searchRes: null,
     loading: false,
+    refineSearch: false,
   };
 
   componentDidMount = () => {
@@ -102,13 +139,15 @@ class App extends Component {
   }
 
   render = () => {
-    const { searchParams, searchRes, loading } = this.state;
+    const {
+      searchParams, searchRes, loading, refineSearch,
+    } = this.state;
 
     return searchRes
       ? (
-        <Container className="py-3">
+        <ContainerStyled className="py-3">
           <Row>
-            <FilterCol xs="12" lg="3">
+            <FilterCol refineSearch={refineSearch} xs="12" lg="3">
               <RangeSlider
                 label="Monthly Budget"
                 valuesFormater={values => `£${values[0]} - £${values[1]}`}
@@ -131,7 +170,7 @@ class App extends Component {
                 disabled={!searchParams.vehicle_make}
               />
             </FilterCol>
-            <ContentCol xs="12" lg="9">
+            <ContentCol refineSearch={refineSearch} xs="12" lg="9">
               {loading && <LoadingCloak />}
               <Row className="justify-content-between">
                 <Col xs="12" lg="6">
@@ -167,7 +206,10 @@ class App extends Component {
               </div>
             </ContentCol>
           </Row>
-        </Container>
+          <RefineSearch onClick={() => this.setState({ refineSearch: !refineSearch })}>
+            {refineSearch ? "Update search and hide filter" : "Refine your search"}
+          </RefineSearch>
+        </ContainerStyled>
       )
       : <div />;
   }
