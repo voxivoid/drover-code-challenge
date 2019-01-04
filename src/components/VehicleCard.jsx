@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Tag from "./Tag";
 
 const Card = styled.div`
+  position: relative;
   background-color: #f5f5f5;
   width: 100%;
   cursor: pointer;
@@ -20,7 +21,7 @@ const Card = styled.div`
     box-shadow: #e4e3e3 0px 2px 4px;
 
     img {
-      transform: scale(1);
+      transform: scale(0.9);
     }
   }
 `;
@@ -33,18 +34,23 @@ const BrandNewTag = styled(Tag)`
 `;
 
 const Img = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   transition: all .3s ease;
   width: 100%;
   max-height: 180px;
   object-fit: contain;
-  transform: scale(0.9);
+  transform: scale(0.8);
 `;
 
 export default function VehicleCard({
   image, year, make, model, brandNew, pricePerMonth,
 }) {
   return (
-    <Card className="d-flex flex-column justify-content-between p-3">
+    <Card className="d-flex flex-column justify-content-end p-3">
       {brandNew && <BrandNewTag text="Brand new!" />}
 
       <Img src={image} alt={`${make} ${model}`} />
