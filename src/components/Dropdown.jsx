@@ -50,6 +50,7 @@ const DropdownMenuStyled = styled(DropdownMenu)`
 
 const DropdownItemStyled = styled(DropdownItem)`
   min-height: 40px;
+  white-space: pre-wrap;
 
   &:hover {
     background-color: #f9f6ed;
@@ -85,7 +86,7 @@ export default class Dropdown extends Component {
 
   render = () => {
     const {
-      label, value, disabled, labelInline,
+      label, value, disabled, labelInline, children,
     } = this.props;
     const { dropdownOpen } = this.state;
 
@@ -95,18 +96,24 @@ export default class Dropdown extends Component {
       <div className={`d-flex ${labelInline ? "flex-row align-items-center" : "flex-column"}`}>
         <Label labelInline={labelInline} disabled={disabled}>{label}</Label>
         <DropdownStyled isOpen={dropdownOpen} toggle={this.toggle}>
+
           <DropdownToggleStyled
-            tag="span"
-            className="d-flex flex-row align-items-center justify-content-between"
+            tag="div"
             onClick={this.toggle}
             data-toggle="dropdown"
             aria-expanded={dropdownOpen}
             disabled={disabled}
           >
-            <span>{_.get(options.find(option => option.value === value), "label")}</span>
-            <i className="fas fa-caret-down" />
+            {children
+            || (
+              <div className="d-flex flex-row align-items-center justify-content-between" style={{ height: "100%" }}>
+                <span>{_.get(options.find(option => option.value === value), "label")}</span>
+                <i className="fas fa-caret-down" />
+              </div>
+            )
+            }
           </DropdownToggleStyled>
-          <DropdownMenuStyled>
+          <DropdownMenuStyled style={!(options && options.length) ? { display: "none" } : {}}>
             {options.map(option => (
               <DropdownItemStyled
                 key={option.value}

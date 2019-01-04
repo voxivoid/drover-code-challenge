@@ -8,6 +8,7 @@ import VehiclesApi from "./api/vehicles";
 
 import Dropdown from "./components/Dropdown";
 import LoadingCloak from "./components/LoadingCloak";
+import Location from "./components/Location";
 import Pagination from "./components/Pagination";
 import RangeSlider from "./components/RangeSlider";
 import Sort from "./components/Sort";
@@ -94,7 +95,7 @@ class App extends Component {
       price_max: 3000,
       per_page: 30,
       page: 1,
-      location: "London, Uk",
+      location: "London, UK",
     },
     searchRes: null,
     loading: false,
@@ -169,6 +170,10 @@ class App extends Component {
                 value={searchParams.vehicle_model_group}
                 onChange={value => this.updateSearchParams({ vehicle_model_group: value })}
                 disabled={!searchParams.vehicle_make}
+              />
+              <Location
+                value={searchParams.location}
+                onChange={value => this.updateSearchParams({ location: value })}
               />
             </FilterCol>
             <ContentCol refineSearch={refineSearch} xs="12" lg="9">
