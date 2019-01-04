@@ -9,9 +9,11 @@ const Card = styled.div`
   width: 100%;
   cursor: pointer;
   transition: all .3s ease;
+  height: 250px;
 
   p {
     font-size: 12px;
+    margin: 0;
   }
 
   &:hover {
@@ -33,6 +35,7 @@ const BrandNewTag = styled(Tag)`
 const Img = styled.img`
   transition: all .3s ease;
   width: 100%;
+  max-height: 180px;
   object-fit: contain;
   transform: scale(0.9);
 `;
@@ -41,7 +44,7 @@ export default function VehicleCard({
   image, year, make, model, brandNew, pricePerMonth,
 }) {
   return (
-    <Card className="d-flex flex-column p-3">
+    <Card className="d-flex flex-column justify-content-between p-3">
       {brandNew && <BrandNewTag text="Brand new!" />}
 
       <Img src={image} alt={`${make} ${model}`} />
